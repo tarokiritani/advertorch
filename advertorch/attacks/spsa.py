@@ -68,7 +68,7 @@ def spsa_grad(predict, loss_fn, x, y, v, delta):
 
     # assumes v != 0
     grad = (f(x + delta * v, y) - f(x - delta * v, y)) / (2 * delta * v)
-    grad = grad.view(*xshape).mean(dim=0, keepdim=True)
+    grad = grad.view(*xshape).sum(dim=0, keepdim=True)
     return grad
 
 
