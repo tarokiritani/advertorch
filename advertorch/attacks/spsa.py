@@ -68,7 +68,7 @@ def spsa_grad(predict, loss_fn, x, y, v, delta):
 
     # assumes v != 0
     grad = (f(x + delta * v, y) - f(x - delta * v, y)) / (2 * delta * v)
-    grad = grad.view(*xshape).mean(dim=0, keepdim=True)
+    grad = grad.view(*xshape).sum(dim=0, keepdim=True)
     return grad
 
 
@@ -120,7 +120,7 @@ def spsa_perturb(predict, loss_fn, x, y, eps, delta, lr, nb_iter,
 
             v_ = v_.bernoulli_().mul_(2.0).sub_(1.0)
             grad = spsa_grad(predict, loss_fn, x_ + dx, y_, v_, delta)
-            dx.grad += grad * v_.shape[0]
+            dx.grad += grad
 
         dx.grad /= nb_sample
         optimizer.step()
